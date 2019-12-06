@@ -1,0 +1,9 @@
+# Project exclude paths
+/out/
+/zero-boot-project/zero-boot/target/
+/zero-boot-project/zero-boot-autoconfigure/target/
+/zero-boot-project/zero-boot-starters/zero-boot-starter/target/
+/zero-boot-project/zero-boot-starters/zero-boot-starter-web/target/
+/zero-boot-project/zero-core/target/
+.flattened-pom.xml
+*.iml

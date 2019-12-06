@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.zeroframework.boot</groupId>
+        <artifactId>zero-boot-build</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>zero-boot-dependencies</artifactId>
+    <packaging>pom</packaging>
+    <name>Zero Boot Dependencies</name>
+    <description>Zero Boot Dependencies</description>
+
+    <properties>
+        <spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--spring boot 依赖版本-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--自定义框架依赖版本-->
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-autoconfigure</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-starters</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- 第三方依赖版本-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.62</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
