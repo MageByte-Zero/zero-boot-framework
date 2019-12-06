@@ -6,9 +6,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.zeroframework.boot.exception.BaseException;
 import org.zeroframework.boot.log.InvokerLog;
 import org.zeroframework.boot.message.ResultCodeEnum;
 import org.zeroframework.boot.util.AspectUtils;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Aspect
+@Order(100)
 public class WebLogAspect {
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) " +
@@ -38,17 +39,11 @@ public class WebLogAspect {
         InvokerLog invoker = initInvokerMessage(joinPoint, startTime, result);
         try {
             result = joinPoint.proceed();
-        } catch (BaseException e) {
-            invoker.setCode(e.getCode());
-            String errorMsg = e.getMessage() == null ? "" : e.getMessage();
-            invoker.setMessage(errorMsg);
-            log.error("Web接口调用失败，异常类型为BaseException, 失败详情: {}", JSONObject.toJSONString(invoker), e);
-            throw new BaseException(e.getCode(), errorMsg, e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             invoker.setCode(ResultCodeEnum.INTERNAL_SERVER_ERROR.getCode());
             String errorMsg = (e.getMessage() == null) ? ResultCodeEnum.INTERNAL_SERVER_ERROR.getMessage() : e.getMessage();
             invoker.setMessage(errorMsg);
-            log.error("Web接口调用失败，异常类型为{}, 失败详情: {}", e.getClass().getSimpleName(), JSONObject.toJSONString(invoker), e);
+            log.warn("Web接口调用失败，异常类型为{}, 失败详情: {}", e.getClass().getSimpleName(), JSONObject.toJSONString(invoker), e);
             throw e;
         }
 
@@ -63,7 +58,7 @@ public class WebLogAspect {
             HttpServletRequest request = attributes.getRequest();
             invoker = AspectUtils.formatInvokerResultMsg(joinPoint, startTime, result, request);
         } catch (Exception e) {
-            log.error("封装Web接口调用详情失败，audit={}", e.getMessage(), e);
+            log.warn("封装Web接口调用详情失败，audit={}", e.getMessage(), e);
         }
         return invoker;
     }
