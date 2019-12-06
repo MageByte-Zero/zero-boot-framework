@@ -7,3 +7,4 @@
 /zero-boot-project/zero-core/target/
 .flattened-pom.xml
 *.iml
+.idea
