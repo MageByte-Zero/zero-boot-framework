@@ -70,7 +70,7 @@ public class AspectUtils {
      * @param request web的HttpServletRequest
      * @return InvokerResultMsg 接口调用结果的信息
      */
-    public static InvokerLog formatInvokerResultMsg(JoinPoint joinPoint, Long startTime, Object result, HttpServletRequest request) {
+    public static InvokerLog formatInvokerResultMsg(JoinPoint joinPoint, Long startTime, HttpServletRequest request) {
         InvokerLog invoker = new InvokerLog();
         long endTime = System.currentTimeMillis();
         try {
@@ -85,7 +85,6 @@ public class AspectUtils {
             invoker.setStartTimeStr(startLocalDateTime.toString());
             invoker.setEndTimeStr(endLocalDateTime.toString());
             invoker.setExecuteTime(executeTime);
-            invoker.setData(result);
         } catch (Exception e) {
             logger.error("格式化接口调用结果失败，audit={}", e.getMessage(), e);
         }

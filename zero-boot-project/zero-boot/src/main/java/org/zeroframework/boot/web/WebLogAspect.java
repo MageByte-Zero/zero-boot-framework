@@ -1,6 +1,7 @@
 package org.zeroframework.boot.web;
 
 import com.alibaba.fastjson.JSONObject;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -36,14 +37,19 @@ public class WebLogAspect {
     public Object aroundMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result = null;
         long startTime = System.currentTimeMillis();
-        InvokerLog invoker = initInvokerMessage(joinPoint, startTime, result);
+        InvokerLog invoker = initInvokerMessage(joinPoint, startTime);
         try {
             result = joinPoint.proceed();
+            long objectSize = ObjectSizeCalculator.getObjectSize(result);
+            // 1 Mb
+            if (objectSize < 8388608) {
+                invoker.setData(result);
+            }
         } catch (Throwable e) {
             invoker.setCode(ResultCodeEnum.INTERNAL_SERVER_ERROR.getCode());
             String errorMsg = (e.getMessage() == null) ? ResultCodeEnum.INTERNAL_SERVER_ERROR.getMessage() : e.getMessage();
             invoker.setMessage(errorMsg);
-            log.warn("Web接口调用失败，异常类型为{}, 失败详情: {}", e.getClass().getSimpleName(), JSONObject.toJSONString(invoker), e);
+            log.warn("Web接口调用失败，异常类型为{}, 失败详情: {}", e.getClass().getSimpleName(), e.getMessage());
             throw e;
         }
 
@@ -51,14 +57,14 @@ public class WebLogAspect {
         return result;
     }
 
-    private InvokerLog initInvokerMessage(ProceedingJoinPoint joinPoint, Long startTime, Object result) {
-        InvokerLog invoker = null;
+    private <T> InvokerLog<T> initInvokerMessage(ProceedingJoinPoint joinPoint, Long startTime) {
+        InvokerLog<T> invoker = null;
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
-            invoker = AspectUtils.formatInvokerResultMsg(joinPoint, startTime, result, request);
+            invoker = AspectUtils.formatInvokerResultMsg(joinPoint, startTime, request);
         } catch (Exception e) {
-            log.warn("封装Web接口调用详情失败，audit={}", e.getMessage(), e);
+            log.warn("封装Web接口调用详情失败，audit={}", e.getMessage());
         }
         return invoker;
     }

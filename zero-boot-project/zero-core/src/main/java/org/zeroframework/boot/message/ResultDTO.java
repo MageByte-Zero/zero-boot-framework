@@ -17,7 +17,7 @@ public class ResultDTO<T> implements Serializable {
     /**
      * 状态码
      */
-    private String code = "200";
+    private Integer code = 200;
 
     /**
      * 状态信息
@@ -71,7 +71,7 @@ public class ResultDTO<T> implements Serializable {
     /**
      * 失败
      */
-    public static <T> ResultDTO<T> error(String code, String message) {
+    public static <T> ResultDTO<T> error(Integer code, String message) {
         ResultDTO<T> rb = new ResultDTO<>();
         rb.setCode(code);
         rb.setMessage(message);
@@ -84,7 +84,7 @@ public class ResultDTO<T> implements Serializable {
      */
     public static <T> ResultDTO<T> error(String message) {
         ResultDTO<T> rb = new ResultDTO<>();
-        rb.setCode("-1");
+        rb.setCode(ResultCodeEnum.INTERNAL_SERVER_ERROR.getCode());
         rb.setMessage(message);
         rb.setData(null);
         return rb;

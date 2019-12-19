@@ -1,5 +1,7 @@
 package org.zeroframework.boot.log;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,7 @@ import java.io.Serializable;
  *
  * @param <T>
  */
+@Data
 public class InvokerLog<T> implements Serializable {
 
     /**
@@ -67,7 +70,7 @@ public class InvokerLog<T> implements Serializable {
     /**
      * 接口返回状态码
      */
-    private String code = "200";
+    private Integer code = 200;
 
     /**
      * 接口返回状态信息，接口正常返回时message为null
@@ -78,109 +81,5 @@ public class InvokerLog<T> implements Serializable {
      * 接口正常返回时的结果
      */
     private T data;
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public String getInterfaceClass() {
-        return interfaceClass;
-    }
-
-    public void setInterfaceClass(String interfaceClass) {
-        this.interfaceClass = interfaceClass;
-    }
-
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
-    public String getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(String parameters) {
-        this.parameters = parameters;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getStartTimeStr() {
-        return startTimeStr;
-    }
-
-    public void setStartTimeStr(String startTimeStr) {
-        this.startTimeStr = startTimeStr;
-    }
-
-    public String getEndTimeStr() {
-        return endTimeStr;
-    }
-
-    public void setEndTimeStr(String endTimeStr) {
-        this.endTimeStr = endTimeStr;
-    }
-
-    public Long getExecuteTime() {
-        return executeTime;
-    }
-
-    public void setExecuteTime(Long executeTime) {
-        this.executeTime = executeTime;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 
 }

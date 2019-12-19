@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class BaseException extends RuntimeException {
 
-    private String code;
+    private Integer code;
 
     private String message;
 
@@ -20,7 +20,7 @@ public class BaseException extends RuntimeException {
         this.message = message;
     }
 
-    public BaseException(String code, String message, Throwable cause) {
+    public BaseException(Integer code, String message, Throwable cause) {
         super(cause);
         this.code = code;
         this.message = message;

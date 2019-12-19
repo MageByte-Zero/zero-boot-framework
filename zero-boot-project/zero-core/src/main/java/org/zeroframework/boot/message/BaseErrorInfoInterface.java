@@ -7,7 +7,7 @@ public interface BaseErrorInfoInterface {
     /**
      * 错误码
      */
-    String getCode();
+    Integer getCode();
 
     /**
      * 错误描述

@@ -16,7 +16,9 @@ import org.zeroframework.boot.message.ResultCodeEnum;
 import org.zeroframework.boot.message.ResultDTO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Web 服务全局异常处理器, 统一返回 ResultDTO
@@ -37,7 +39,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public <T> ResultDTO<T> baseExceptionHandler(HttpServletRequest req, BaseException e) {
         log.error("发生业务异常！", e);
-        String code = StringUtils.isBlank(e.getCode()) ? ResultCodeEnum.INTERNAL_SERVER_ERROR.getCode() : e.getCode();
+        int code = Objects.isNull(e.getCode()) ? ResultCodeEnum.INTERNAL_SERVER_ERROR.getCode() : e.getCode();
         String message = StringUtils.isBlank(e.getMessage()) ? ResultCodeEnum.INTERNAL_SERVER_ERROR.getMessage(): e.getMessage();
         return ResultDTO.error(code, message);
     }
@@ -62,7 +64,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public <T> ResultDTO<T> exceptionHandler(HttpServletRequest req, NullPointerException e) {
         log.error("发生空指针异常！", e);
-        return ResultDTO.error(ResultCodeEnum.BODY_NOT_MATCH);
+        return ResultDTO.error(ResultCodeEnum.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -83,7 +85,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultDTO<String> handlerBindException(HttpServletRequest request, BindException e) {
         StringBuilder sb = new StringBuilder();
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
@@ -91,12 +93,12 @@ public class GlobalExceptionHandler {
             sb.append(fe.getField()).append(":").append(fe.getDefaultMessage()).append(";");
         }
         String errorStr = sb.length() == 0 ? "" : sb.substring(0, sb.length() - 1);
-        return ResultDTO.error(errorStr);
+        return ResultDTO.error(HttpStatus.BAD_REQUEST.value(), errorStr);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResultDTO<String> handlerMethodArgumentNotValidException(HttpServletRequest request, MethodArgumentNotValidException e) {
         StringBuilder sb = new StringBuilder();
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
@@ -104,6 +106,14 @@ public class GlobalExceptionHandler {
             sb.append(fe.getField()).append(":").append(fe.getDefaultMessage()).append(";");
         }
         String errorStr = sb.length() == 0 ? "" : sb.substring(0, sb.length() - 1);
-        return ResultDTO.error(errorStr);
+        return ResultDTO.error(HttpStatus.BAD_REQUEST.value(), errorStr);
+    }
+
+    @ExceptionHandler(value = SQLException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResultDTO<String> handlerSQLException(SQLException e) {
+        log.error("数据库异常！", e);
+        return ResultDTO.error(ResultCodeEnum.INTERNAL_SERVER_ERROR);
     }
 }
