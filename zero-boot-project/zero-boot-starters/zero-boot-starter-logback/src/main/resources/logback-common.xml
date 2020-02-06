@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
+    <!--
+    说明：
+    1. 文件的命名和加载顺序有关
+       logback.xml早于application.yml加载，logback-spring.xml晚于application.yml加载
+       如果logback配置需要使用application.yml中的属性，需要命名为logback-spring.xml
+    2. logback使用application.yml中的属性
+       使用springProperty才可使用application.yml中的值 可以设置默认值
+
+    -->
+
     <!-- scope=context：该属性在本配置内使用有效，source为在application.properties中定义的信息，defaultValue为默认值 -->
-    <springProperty scope="system" name="logPath" source="logging.file.path" defaultValue="app-logs" />
-    <springProperty scope="system" name="logName" source="spring.application.name" defaultValue="zero-log" />
+    <springProperty scope="system" name="logPath" source="logging.file.path" defaultValue="app-logs"/>
+    <springProperty scope="system" name="logName" source="spring.application.name" defaultValue="zero-log"/>
 
     <!-- 日志输出格式 -->
-    <!--yyyy-MM-dd HH:mm:ss.SSS : 时间
-    %6p: 日志级别
-    %t：线程名称，如http-nio-8031-exec-3
-    %logger-%line：Class名称及指定行，如com.lls.framework.rpc.dubbo.filter.ConsumerHolderFilter-41
-    %msg：日志内容-->
-<!--    %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)-->
+    <!--    %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)-->
     <!--%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n-->
 
-    <property name="logPattern" value="%white(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger-%line) - %cyan(%msg%n)" />
+    <property name="logPattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger-%line - %msg%n"/>
 
     <!-- 控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${logPattern}</pattern>
+            <pattern>%white(%d{yyyy-MM-dd HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger-%line) - %cyan(%msg%n)
+            </pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>
@@ -121,4 +127,34 @@
             <maxFileSize>20MB</maxFileSize>
         </rollingPolicy>
     </appender>
+
+    <!-- 异步输出，异步的log片段必须在同步段后面，否则不起作用 -->
+    <appender name="allAppenderAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <appender-ref ref="allAppender"/>
+    </appender>
+
+    <appender name="sqlAppenderAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>512</queueSize>
+        <appender-ref ref="sqlAppender"/>
+    </appender>
+
+    <appender name="infoAppenderAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <appender-ref ref="infoAppender"/>
+    </appender>
+    <appender name="warnAppenderAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>512</queueSize>
+        <appender-ref ref="warnAppender"/>
+    </appender>
+    <appender name="errorAppenderAsync" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>512</queueSize>
+        <appender-ref ref="errorAppender"/>
+    </appender>
+
 </included>
