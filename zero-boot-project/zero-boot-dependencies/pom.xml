@@ -62,6 +62,12 @@
                 <version>${revision}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-starter-logback</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- 第三方依赖版本-->
             <dependency>
                 <groupId>com.alibaba</groupId>

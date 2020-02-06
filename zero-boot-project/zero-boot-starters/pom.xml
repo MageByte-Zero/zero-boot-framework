@@ -19,6 +19,7 @@
         <module>zero-boot-starter</module>
         <module>zero-boot-starter-web</module>
         <module>zero-boot-starter-parent</module>
+        <module>zero-boot-starter-logback</module>
     </modules>
 
 
