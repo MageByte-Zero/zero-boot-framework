@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>zero-boot</artifactId>
+    <packaging>jar</packaging>
     <name>Zero Boot</name>
     <description>Zero Boot, 核心第三方依赖用于支持自定义starter</description>
 

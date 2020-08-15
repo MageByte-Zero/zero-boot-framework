@@ -18,6 +18,18 @@
         <revision>1.0-SNAPSHOT</revision>
     </properties>
 
+    <!-- 开发者 -->
+    <developers>
+        <developer>
+            <!-- Information Technology Department -->
+            <name>MageByte</name>
+            <email>zero_develop@163.com</email>
+            <organization>MageByte</organization>
+            <organizationUrl>https://github.com/UniqueDong/zero-boot-framework</organizationUrl>
+        </developer>
+    </developers>
+
+
     <build>
         <plugins>
             <plugin>

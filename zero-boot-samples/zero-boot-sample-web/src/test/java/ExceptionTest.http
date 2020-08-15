@@ -1,0 +1,30 @@
+GET http://localhost:8206/sql-exception
+Accept: application/json
+
+###
+
+GET http://localhost:8206/greeting
+Accept: application/json
+
+###
+
+GET http://localhost:8206/base-exception
+Accept: application/json
+
+###
+
+GET http://localhost:8206/exception-test
+Accept: application/json
+
+###
+
+GET http://localhost:8206/exception-null
+Accept: application/json
+
+###
+
+GET http://localhost:8206/methodArgumentNotValidException
+Accept: application/json
+
+###
+
