@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.zeroframework.boot.autoconfigure.web.WebPlusAutoConfiguration
+org.zeroframework.boot.autoconfigure.web.WebPlusAutoConfiguration,\
+org.zeroframework.boot.autoconfigure.sequence.SequenceAutoConfiguration

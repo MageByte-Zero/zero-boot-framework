@@ -17,6 +17,18 @@
 
     <properties>
         <spring-boot.version>2.2.1.RELEASE</spring-boot.version>
+        <fastjson.version>1.2.62</fastjson.version>
+        <lombok.version>1.18.2</lombok.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-io.version>2.7</commons-io.version>
+        <curator.version>5.1.0</curator.version>
+        <janino.version>3.1.0</janino.version>
+        <mybatis.version>3.5.5</mybatis.version>
+        <mybatis-spring.version>2.0.5</mybatis-spring.version>
+        <jackson-databind.version>2.9.6</jackson-databind.version>
+        <guava.version>29.0-jre</guava.version>
+        <druid.version>1.1.23</druid.version>
+        <perf4j.version>0.9.16</perf4j.version>
     </properties>
 
     <dependencyManagement>
@@ -72,24 +84,76 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.62</version>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.2</version>
+                <version>${lombok.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.9</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.codehaus.janino</groupId>
                 <artifactId>janino</artifactId>
-                <version>3.1.0</version>
+                <version>${janino.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.perf4j</groupId>
+                <artifactId>perf4j</artifactId>
+                <version>${perf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+
+            <!--zk-->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>log4j</artifactId>
+                        <groupId>log4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
         </dependencies>

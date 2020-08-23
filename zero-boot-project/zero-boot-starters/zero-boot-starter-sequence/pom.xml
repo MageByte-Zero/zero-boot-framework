@@ -3,28 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.zeroframework.boot</groupId>
         <artifactId>zero-boot-starters</artifactId>
+        <groupId>org.zeroframework.boot</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>zero-boot-starter-web</artifactId>
-    <name>Zero Boot Web Starter</name>
-    <description>Starter for Web, log method invoke and process exception</description>
+    <artifactId>zero-boot-starter-sequence</artifactId>
+
+    <name>Zero Boot Sequence Starter</name>
+    <description>Starter for Sequence, 分布式 ID 生成</description>
+
     <dependencies>
         <dependency>
             <groupId>org.zeroframework.boot</groupId>
             <artifactId>zero-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
     </dependencies>
+
 
 </project>
