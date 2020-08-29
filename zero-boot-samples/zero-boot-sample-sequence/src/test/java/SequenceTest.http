@@ -1,0 +1,6 @@
+GET http://localhost:8207/sequence/snowflake?key=MageByte
+Accept: application/json
+
+###
+
+

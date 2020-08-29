@@ -21,6 +21,7 @@
 
     <modules>
         <module>zero-boot-sample-web</module>
+        <module>zero-boot-sample-sequence</module>
     </modules>
 
     <build>

@@ -73,6 +73,11 @@
                 <artifactId>zero-boot-starter-web</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>org.zeroframework.boot</groupId>
+                <artifactId>zero-boot-starter-sequence</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.zeroframework.boot</groupId>

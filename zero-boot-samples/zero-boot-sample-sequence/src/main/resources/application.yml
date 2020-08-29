@@ -1,0 +1,25 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    timeZone: GMT+8:00
+  application:
+    name: zero-boot-sequence-sample
+server:
+  port: 8207
+logging:
+  level:
+    root: info
+
+zero:
+  boot:
+    web:
+      enabled: true
+      controller-advice: true
+      web-log: true
+    sequence:
+      enabled: true
+      snowflake:
+        enabled: true
+        address: 127.0.0.1:2181
+        port: 2199
+
