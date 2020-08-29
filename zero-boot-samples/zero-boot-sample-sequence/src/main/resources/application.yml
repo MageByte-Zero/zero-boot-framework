@@ -22,4 +22,9 @@ zero:
         enabled: true
         address: 127.0.0.1:2181
         port: 2199
+      segment:
+        enabled: true
+        username: root
+        password: Dr081524
+        url: jdbc:mysql://localhost:3306/leaf
 

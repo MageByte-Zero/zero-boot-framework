@@ -8,11 +8,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.zeroframework.boot.sequence.leaf.facade.SegmentSequenceGen;
-import org.zeroframework.boot.sequence.SequenceGen;
-import org.zeroframework.boot.sequence.leaf.facade.SnowflakeSequenceGen;
 import org.zeroframework.boot.sequence.leaf.exception.InitException;
+import org.zeroframework.boot.sequence.leaf.facade.SegmentSequenceGen;
+import org.zeroframework.boot.sequence.leaf.facade.SnowflakeSequenceGen;
 
 @Slf4j
 @Configuration
@@ -24,20 +22,19 @@ public class SequenceAutoConfiguration {
     private SequenceProperties properties;
 
     @Bean
-    @ConditionalOnMissingBean(name = "segmentSequenceGen")
+    @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = SequenceProperties.SEQUENCE_PREFIX + ".segment", name = "enabled", havingValue = "true")
-    public SequenceGen segmentSequenceGen() throws Exception {
+    public SegmentSequenceGen segmentSequenceGen() throws Exception {
         SegmentSequenceGen segmentSequenceGen = new SegmentSequenceGen(properties.getSegment().getUrl()
                 , properties.getSegment().getUsername(), properties.getSegment().getPassword());
         log.info("zero-boot-starter-sequence create segmentSequenceGen success, properties = {}", JSON.toJSONString(properties));
         return segmentSequenceGen;
     }
 
-    @Primary
     @Bean
-    @ConditionalOnMissingBean(name = "snowflakeSequenceGen")
+    @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = SequenceProperties.SEQUENCE_PREFIX + ".snowflake", name = "enabled", havingValue = "true")
-    public SequenceGen snowflakeSequenceGen() throws InitException {
+    public SnowflakeSequenceGen snowflakeSequenceGen() throws InitException {
         SnowflakeSequenceGen snowflakeSequenceGen = new SnowflakeSequenceGen(properties.getSnowflake().getAddress()
                 , properties.getSnowflake().getPort());
         log.info("zero-boot-starter-sequence create snowflakeSequenceGen success, properties = {}", JSON.toJSONString(properties));
