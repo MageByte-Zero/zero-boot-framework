@@ -1,5 +1,6 @@
 package org.zero.web;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,8 @@ import org.zeroframework.boot.exception.BaseException;
 import org.zeroframework.boot.message.ResultDTO;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -50,6 +53,16 @@ public class GreetingController {
     @GetMapping("/methodArgumentNotValidException")
     public ResultDTO<String> methodArgumentNotValidException(@Validated GreetRequest greetRequest) throws Exception {
         return ResultDTO.success();
+    }
+
+    @GetMapping("/localDate")
+    public ResultDTO<LocalDate> dateTimeResultDTO(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate) {
+        return ResultDTO.success(localDate);
+    }
+
+    @GetMapping("/localDateTime")
+    public ResultDTO<LocalDateTime> dateTimeResultDTO(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH::mm:ss") LocalDateTime localDateTime) {
+        return ResultDTO.success(localDateTime);
     }
 
 }

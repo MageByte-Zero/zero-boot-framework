@@ -1,3 +1,11 @@
+GET http://localhost:8206/localDateTime?localDateTime=2020-09-12 14:12:11
+Accept: application/json
+
+###
+GET http://localhost:8206/localDate?localDate=2020-09-12
+Accept: application/json
+
+###
 GET http://localhost:8206/sql-exception
 Accept: application/json
 
