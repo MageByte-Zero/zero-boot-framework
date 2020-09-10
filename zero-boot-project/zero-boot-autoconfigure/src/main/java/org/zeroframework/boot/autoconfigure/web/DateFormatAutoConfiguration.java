@@ -1,5 +1,6 @@
 package org.zeroframework.boot.autoconfigure.web;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -44,6 +45,7 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalDate> localDateConverter() {
+        log.info("zero-boot-starter-web 加载了 LocalDate 转换器.");
         return new Converter<String, LocalDate>() {
             @Override
             public LocalDate convert(String source) {
@@ -60,6 +62,7 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalDateTime> localDateTimeConverter() {
+        log.info("zero-boot-starter-web 加载了 LocalDateTime 转换器.");
         return new Converter<String, LocalDateTime>() {
             @Override
             public LocalDateTime convert(String source) {
@@ -76,6 +79,7 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalTime> localTimeConverter() {
+        log.info("zero-boot-starter-web 加载了 LocalTime 转换器.");
         return new Converter<String, LocalTime>() {
             @Override
             public LocalTime convert(String source) {
@@ -92,6 +96,7 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, Date> dateConverter() {
+        log.info("zero-boot-starter-web 加载了 Date 转换器.");
         return new Converter<String, Date>() {
             @Override
             public Date convert(String source) {
@@ -110,7 +115,7 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-        log.info("zero-boot-starter-web 加载了 bean {}", Jackson2ObjectMapperBuilderCustomizer.class.getName());
+        log.info("zero-boot-starter-web 加载了 Jackson2ObjectMapperBuilderCustomizer, DateFormatProperties = {}", JSON.toJSONString(dateFormatProperties));
 
         return builder -> builder
                 .simpleDateFormat(dateFormatProperties.getDateTimeFormat())
