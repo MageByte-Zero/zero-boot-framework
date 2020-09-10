@@ -1,17 +1,15 @@
 package org.zero.web;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.zeroframework.boot.exception.BaseException;
 import org.zeroframework.boot.message.ResultDTO;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -55,14 +53,21 @@ public class GreetingController {
         return ResultDTO.success();
     }
 
-    @GetMapping("/localDate")
-    public ResultDTO<LocalDate> dateTimeResultDTO(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate) {
-        return ResultDTO.success(localDate);
+    @GetMapping("/date")
+    public ResultDTO<DateDTO> dateTimeResultDTO(@RequestParam LocalDate localDate, @RequestParam LocalDateTime localDateTime
+            , @RequestParam LocalTime localTime, @RequestParam Date date) {
+        DateDTO dateDTO = new DateDTO();
+        dateDTO.setDate(date);
+        dateDTO.setLocalDate(localDate);
+        dateDTO.setLocalDateTime(localDateTime);
+        dateDTO.setLocalTime(localTime);
+
+        return ResultDTO.success(dateDTO);
     }
 
-    @GetMapping("/localDateTime")
-    public ResultDTO<LocalDateTime> dateTimeResultDTO(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH::mm:ss") LocalDateTime localDateTime) {
-        return ResultDTO.success(localDateTime);
+    @PostMapping("/date")
+    public ResultDTO<DateDTO> postDate(@RequestBody DateDTO dateDTO) {
+        return ResultDTO.success(dateDTO);
     }
 
 }

@@ -1,9 +1,7 @@
 package org.zeroframework.boot.autoconfigure.web;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
@@ -14,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -46,11 +44,14 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalDate> localDateConverter() {
-        return source -> {
-            if (StringUtils.isNotBlank(source)) {
-                return LocalDate.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getDateFormat()));
+        return new Converter<String, LocalDate>() {
+            @Override
+            public LocalDate convert(String source) {
+                if (StringUtils.isNotBlank(source)) {
+                    return LocalDate.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getDateFormat()));
+                }
+                return null;
             }
-            return null;
         };
     }
 
@@ -59,11 +60,14 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalDateTime> localDateTimeConverter() {
-        return source -> {
-            if (StringUtils.isNotBlank(source)) {
-                return LocalDateTime.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getDateTimeFormat()));
+        return new Converter<String, LocalDateTime>() {
+            @Override
+            public LocalDateTime convert(String source) {
+                if (StringUtils.isNotBlank(source)) {
+                    return LocalDateTime.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getDateTimeFormat()));
+                }
+                return null;
             }
-            return null;
         };
     }
 
@@ -72,11 +76,14 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, LocalTime> localTimeConverter() {
-        return source -> {
-            if (StringUtils.isNotBlank(source)) {
-                return LocalTime.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getTimeFormat()));
+        return new Converter<String, LocalTime>() {
+            @Override
+            public LocalTime convert(String source) {
+                if (StringUtils.isNotBlank(source)) {
+                    return LocalTime.parse(source, DateTimeFormatter.ofPattern(dateFormatProperties.getTimeFormat()));
+                }
+                return null;
             }
-            return null;
         };
     }
 
@@ -85,8 +92,9 @@ public class DateFormatAutoConfiguration {
      */
     @Bean
     public Converter<String, Date> dateConverter() {
-        return source -> {
-            if (StringUtils.isNotBlank(source)) {
+        return new Converter<String, Date>() {
+            @Override
+            public Date convert(String source) {
                 SimpleDateFormat format = new SimpleDateFormat(dateFormatProperties.getDateTimeFormat());
                 try {
                     return format.parse(source);
@@ -94,58 +102,31 @@ public class DateFormatAutoConfiguration {
                     throw new RuntimeException(e);
                 }
             }
-            return null;
         };
     }
 
-
     /**
-     * Json序列化和反序列化转换器，用于转换Post请求体中的json以及将我们的对象序列化为返回响应的json
+     * 定义输入 json 与输出 json的序列化与反序列化
      */
     @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        log.info("zero-boot-starter-web 加载了 bean {}", Jackson2ObjectMapperBuilderCustomizer.class.getName());
 
-        //LocalDateTime系列序列化和反序列化模块，继承自jsr310，我们在这里修改了日期格式
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormatProperties.getDateTimeFormat());
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(dateFormatProperties.getDateFormat());
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(dateFormatProperties.getTimeFormat());
-
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(timeFormatter));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTimeFormatter));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(dateFormatter));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
-
-        //Date序列化和反序列化
-        javaTimeModule.addSerializer(Date.class, new JsonSerializer<Date>() {
-
-            @Override
-            public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-                SimpleDateFormat formatter = new SimpleDateFormat(dateFormatProperties.getDateTimeFormat());
-                String formattedDate = formatter.format(date);
-                jsonGenerator.writeString(formattedDate);
-            }
-        });
-        javaTimeModule.addDeserializer(Date.class, new JsonDeserializer<Date>() {
-            @Override
-            public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-                SimpleDateFormat format = new SimpleDateFormat(dateFormatProperties.getDateTimeFormat());
-                String date = jsonParser.getText();
-                try {
-                    return format.parse(date);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-        objectMapper.registerModule(javaTimeModule);
-        return objectMapper;
+        return builder -> builder
+                .simpleDateFormat(dateFormatProperties.getDateTimeFormat())
+                .serializers(
+                        new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormatProperties.getDateFormat())),
+                        new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormatProperties.getDateTimeFormat())),
+                        new LocalTimeSerializer(DateTimeFormatter.ofPattern(dateFormatProperties.getTimeFormat()))
+                )
+                .deserializers(
+                        new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormatProperties.getDateFormat())),
+                        new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatProperties.getDateTimeFormat())),
+                        new LocalTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatProperties.getTimeFormat()))
+                )
+                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
 }

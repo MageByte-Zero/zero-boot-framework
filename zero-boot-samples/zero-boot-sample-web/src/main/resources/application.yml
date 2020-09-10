@@ -1,7 +1,4 @@
 spring:
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    timeZone: GMT+8:00
   application:
     name: zero-boot-web-sample
 server:
@@ -15,4 +12,9 @@ zero:
     web:
       enabled: true
       controller-advice: true
-      web-log: true
+      web-log:
+    date:
+      enabled: true
+      date-time-format: yyyy/MM/dd HH:mm:ss
+      date-format: yyyy/MM/dd
+      time-format: HH:mm:ss

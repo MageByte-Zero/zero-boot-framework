@@ -1,0 +1,16 @@
+POST http://localhost:8206/date
+Content-Type: application/json
+
+{
+  "localDate": "2020/12/08",
+  "localDateTime": "2020/12/08 12:24:30",
+  "localTime": "12:24:30",
+  "date": "2020/12/08 12:24:30"
+}
+
+###
+GET http://localhost:8206/date?localDate=2020-09-12&localDateTime=2019-09-08 12:23:23&localTime=12:10:10&date=2019-09-07 12:23:23
+Accept: application/json
+
+###
+
