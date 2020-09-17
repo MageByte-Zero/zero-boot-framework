@@ -16,10 +16,10 @@ import java.util.ArrayList;
 @RequestMapping("/sequence")
 public class SequenceController {
 
-    @Autowired
+    @Autowired(required = false)
     private SnowflakeSequenceGen snowflakeSequenceGen;
 
-    @Autowired
+    @Autowired(required = false)
     private SegmentSequenceGen segmentSequenceGen;
 
     @GetMapping("/snowflake")

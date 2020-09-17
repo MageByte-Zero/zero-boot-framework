@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SequenceApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(SequenceApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(SequenceApplication.class, args);
+    }
 }

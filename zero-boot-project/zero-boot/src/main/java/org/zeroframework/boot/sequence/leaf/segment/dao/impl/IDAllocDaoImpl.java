@@ -28,47 +28,39 @@ public class IDAllocDaoImpl implements IDAllocDao {
 
     @Override
     public List<LeafAlloc> getAllLeafAllocs() {
-        SqlSession sqlSession = sqlSessionFactory.openSession(false);
-        try {
-            return sqlSession.selectList("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.getAllLeafAllocs");
-        } finally {
-            sqlSession.close();
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(false)) {
+            IDAllocMapper mapper = sqlSession.getMapper(IDAllocMapper.class);
+            return mapper.getAllLeafAllocs();
         }
     }
 
     @Override
     public LeafAlloc updateMaxIdAndGetLeafAlloc(String tag) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        try {
-            sqlSession.update("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.updateMaxId", tag);
-            LeafAlloc result = sqlSession.selectOne("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.getLeafAlloc", tag);
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            IDAllocMapper mapper = sqlSession.getMapper(IDAllocMapper.class);
+            mapper.updateMaxId(tag);
+            LeafAlloc result = mapper.getLeafAlloc(tag);
             sqlSession.commit();
             return result;
-        } finally {
-            sqlSession.close();
         }
     }
 
     @Override
     public LeafAlloc updateMaxIdByCustomStepAndGetLeafAlloc(LeafAlloc leafAlloc) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        try {
-            sqlSession.update("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.updateMaxIdByCustomStep", leafAlloc);
-            LeafAlloc result = sqlSession.selectOne("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.getLeafAlloc", leafAlloc.getKey());
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            IDAllocMapper mapper = sqlSession.getMapper(IDAllocMapper.class);
+            mapper.updateMaxIdByCustomStep(leafAlloc);
+            LeafAlloc result = mapper.getLeafAlloc(leafAlloc.getKey());
             sqlSession.commit();
             return result;
-        } finally {
-            sqlSession.close();
         }
     }
 
     @Override
     public List<String> getAllTags() {
-        SqlSession sqlSession = sqlSessionFactory.openSession(false);
-        try {
-            return sqlSession.selectList("org.zeroframework.boot.sequence.leaf.segment.dao.IDAllocMapper.getAllTags");
-        } finally {
-            sqlSession.close();
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(false)) {
+            IDAllocMapper mapper = sqlSession.getMapper(IDAllocMapper.class);
+            return mapper.getAllTags();
         }
     }
 }
